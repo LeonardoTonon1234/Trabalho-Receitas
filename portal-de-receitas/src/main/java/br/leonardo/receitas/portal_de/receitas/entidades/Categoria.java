@@ -22,8 +22,9 @@ public class Categoria {
     private String nome;
 
     @OneToMany(mappedBy = "categoria", cascade = CascadeType.ALL)
-    private List<Receita> receitas;
+    private List<Receita> receitas; // Relacionamento com Receita
 
+    // Construtor com parâmetros
     public Categoria(String nome, List<Receita> receitas) {
         this.nome = nome;
         this.receitas = receitas;
