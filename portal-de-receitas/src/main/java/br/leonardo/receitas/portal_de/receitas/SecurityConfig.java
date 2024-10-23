@@ -28,7 +28,7 @@ public class SecurityConfig {
             )
             .headers(headers -> headers
                 .contentSecurityPolicy(csp -> csp
-                    .policyDirectives("default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline';")
+                    .policyDirectives("default-src 'self'; script-src 'self' https://trustedscripts.example.com; form-action 'self' https://turbo-space-palm-tree-jj56jx74vx5xfp579-8081.app.github.dev; style-src 'self' 'unsafe-inline';")
                 )
                 .frameOptions(frameOptions -> frameOptions.sameOrigin()) // Permitir que o conteúdo seja carregado em iframes da mesma origem
             );
