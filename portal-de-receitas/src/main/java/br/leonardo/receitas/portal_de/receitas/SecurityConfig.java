@@ -13,7 +13,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            .csrf(cs -> cs.disable()) // Desabilitar CSRF se não estiver usando formulários
+            .csrf(csrf -> csrf.disable()) // Desabilitar CSRF se não estiver usando formulários
             .authorizeHttpRequests(authz -> authz
                 .requestMatchers("/login", "/css/**", "/js/**", "/images/**") // Permitir acesso a estas URLs
                 .permitAll()
@@ -27,7 +27,10 @@ public class SecurityConfig {
                 .permitAll()
             )
             .headers(headers -> headers
-                .frameOptions(frameOptions -> frameOptions.sameOrigin()) // Usando Customizer para frameOptions
+                .contentSecurityPolicy(csp -> csp
+                    .policyDirectives("default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline';")
+                )
+                .frameOptions(frameOptions -> frameOptions.sameOrigin()) // Permitir que o conteúdo seja carregado em iframes da mesma origem
             );
 
         return http.build();
