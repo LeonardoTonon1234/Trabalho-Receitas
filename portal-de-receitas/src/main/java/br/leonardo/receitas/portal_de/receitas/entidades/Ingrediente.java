@@ -1,4 +1,4 @@
-package br.leonardo.receitas.portal;
+package br.leonardo.receitas.portal_de.receitas.entidades;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -21,13 +21,12 @@ public class Ingrediente {
 
     private Double quantidade;
 
-    private String unidadeMedida; // Ex: gramas, colheres, etc.
+    private String unidadeMedida;
 
     @ManyToOne
     @JoinColumn(name = "receita_id")
     private Receita receita;
 
-    // Construtor com parâmetros
     public Ingrediente(String nome, Double quantidade, String unidadeMedida, Receita receita) {
         this.nome = nome;
         this.quantidade = quantidade;

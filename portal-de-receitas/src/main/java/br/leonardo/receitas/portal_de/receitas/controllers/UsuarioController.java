@@ -1,7 +1,7 @@
-package br.leonardo.receitas.portal.controllers;
+package br.leonardo.receitas.portal_de.receitas.controllers;
 
-import br.leonardo.receitas.portal.Usuario;
-import br.leonardo.receitas.portal.repositories.UsuarioRepository;
+import br.leonardo.receitas.portal_de.receitas.entidades.Usuario;
+import br.leonardo.receitas.portal_de.receitas.repositories.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

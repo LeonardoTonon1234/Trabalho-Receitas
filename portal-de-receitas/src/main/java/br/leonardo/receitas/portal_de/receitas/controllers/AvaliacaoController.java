@@ -1,7 +1,7 @@
-package br.leonardo.receitas.portal.controllers;
+package br.leonardo.receitas.portal_de.receitas.controllers;
 
-import br.leonardo.receitas.portal.Avaliacao;
-import br.leonardo.receitas.portal.repositories.AvaliacaoRepository;
+import br.leonardo.receitas.portal_de.receitas.entidades.Avaliacao;
+import br.leonardo.receitas.portal_de.receitas.repositories.AvaliacaoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

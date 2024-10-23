@@ -1,4 +1,4 @@
-package br.leonardo.receitas.portal.entidades; // Certifique-se de que o pacote corresponde à nova estrutura
+package br.leonardo.receitas.portal_de.receitas.entidades;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -17,7 +17,7 @@ public class Avaliacao {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private int estrelas; // Avaliação de 1 a 5 estrelas
+    private int estrelas;
 
     @ManyToOne
     @JoinColumn(name = "receita_id")
@@ -27,7 +27,6 @@ public class Avaliacao {
     @JoinColumn(name = "usuario_id")
     private Usuario usuario;
 
-    // Construtor com parâmetros
     public Avaliacao(int estrelas, Receita receita, Usuario usuario) {
         this.estrelas = estrelas;
         this.receita = receita;

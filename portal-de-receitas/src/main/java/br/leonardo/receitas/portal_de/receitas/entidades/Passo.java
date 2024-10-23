@@ -1,4 +1,4 @@
-package br.leonardo.receitas.portal;
+package br.leonardo.receitas.portal_de.receitas.entidades;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -19,13 +19,12 @@ public class Passo {
 
     private String descricao;
 
-    private int ordem; // Para definir a sequência dos passos
+    private int ordem;
 
     @ManyToOne
     @JoinColumn(name = "receita_id")
     private Receita receita;
 
-    // Construtor com parâmetros
     public Passo(String descricao, int ordem, Receita receita) {
         this.descricao = descricao;
         this.ordem = ordem;

@@ -1,4 +1,4 @@
-package br.leonardo.receitas.portal;
+package br.leonardo.receitas.portal_de.receitas.entidades;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -23,9 +23,8 @@ public class Usuario {
 
     private String senha;
 
-    private boolean isAdmin; // Campo para distinguir se o usuário é administrador
+    private boolean isAdmin;
 
-    // Construtor com parâmetros
     public Usuario(String nome, String email, String senha, boolean isAdmin) {
         this.nome = nome;
         this.email = email;

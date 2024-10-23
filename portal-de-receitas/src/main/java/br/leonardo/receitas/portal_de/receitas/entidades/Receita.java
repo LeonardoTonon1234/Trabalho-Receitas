@@ -1,4 +1,4 @@
-package br.leonardo.receitas.portal;
+package br.leonardo.receitas.portal_de.receitas.entidades;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -26,7 +26,6 @@ public class Receita {
     @OneToMany(mappedBy = "receita", cascade = CascadeType.ALL)
     private List<Ingrediente> ingredientes;
 
-    // Construtor com parâmetros
     public Receita(String nome, String descricao, List<Ingrediente> ingredientes) {
         this.nome = nome;
         this.descricao = descricao;

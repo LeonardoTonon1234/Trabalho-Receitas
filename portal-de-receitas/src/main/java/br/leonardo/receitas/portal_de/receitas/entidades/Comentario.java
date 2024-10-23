@@ -1,4 +1,4 @@
-package br.leonardo.receitas.portal;
+package br.leonardo.receitas.portal_de.receitas.entidades;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -31,10 +31,9 @@ public class Comentario {
     @JoinColumn(name = "usuario_id")
     private Usuario usuario;
 
-    // Construtor com parâmetros
     public Comentario(String texto, Receita receita, Usuario usuario) {
         this.texto = texto;
-        this.dataCriacao = LocalDateTime.now(); // Define a data de criação automaticamente
+        this.dataCriacao = LocalDateTime.now();
         this.receita = receita;
         this.usuario = usuario;
     }
