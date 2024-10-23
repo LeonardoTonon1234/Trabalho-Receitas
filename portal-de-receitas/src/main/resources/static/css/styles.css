@@ -1,0 +1,63 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+/* Cabeçalho */
+header {
+    background-color: red; /* Cor de fundo vermelha */
+    color: white;          /* Texto branco */
+    padding: 20px;
+    text-align: center;
+}
+
+/* Estilo do Formulário */
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px;
+}
+
+input[type="text"], input[type="password"] {
+    padding: 10px;
+    margin: 10px 0;
+    width: 80%;  /* Largura do campo de input */
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+/* Botão de Submit */
+button {
+    background-color: red; /* Cor de fundo do botão */
+    color: white;          /* Texto do botão */
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s; /* Transição para o botão */
+}
+
+button:hover {
+    background-color: darkred; /* Cor ao passar o mouse */
+}
+
+/* Estilo do Rodapé */
+footer {
+    background-color: black; /* Cor de fundo preta */
+    color: white;            /* Texto branco */
+    text-align: center;
+    padding: 10px;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+/* Corpo da Página */
+main {
+    background-color: white; /* Cor de fundo branca */
+    color: black;            /* Texto preto */
+    padding: 20px;
+    min-height: calc(100vh - 100px); /* Ajuste para evitar sobreposição com o rodapé */
+}
