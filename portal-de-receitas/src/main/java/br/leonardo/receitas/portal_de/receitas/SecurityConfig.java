@@ -1,5 +1,4 @@
 package br.leonardo.receitas.portal_de.receitas;
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -27,14 +26,9 @@ public class SecurityConfig {
                 .permitAll()
             )
             .headers(headers -> headers
-                .contentSecurityPolicy(csp -> csp
-                    .policyDirectives("default-src 'self'; " +
-                                     "script-src 'self' https://apis.google.com; " +
-                                     "style-src 'self' 'unsafe-inline'; " +
-                                     "form-action 'self' https://turbo-space-palm-tree-jj56jx74vx5xfp579-8081.app.github.dev; " +
-                                     "connect-src 'self' https://turbo-space-palm-tree-jj56jx74vx5xfp579-8081.app.github.dev;")
-                )
-                .frameOptions().sameOrigin() // Permitir que o conteúdo seja carregado em iframes da mesma origem
+                .contentSecurityPolicy(policy -> 
+                    policy.policyDirectives("default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline';")) // Configuração CSP
+                .frameOptions(frameOptions -> frameOptions.sameOrigin()) // Permitir iframes da mesma origem
             );
 
         return http.build();
