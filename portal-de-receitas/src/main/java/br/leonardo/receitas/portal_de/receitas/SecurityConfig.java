@@ -28,9 +28,13 @@ public class SecurityConfig {
             )
             .headers(headers -> headers
                 .contentSecurityPolicy(csp -> csp
-                    .policyDirectives("default-src 'self'; script-src 'self' https://trustedscripts.example.com; form-action 'self' https://turbo-space-palm-tree-jj56jx74vx5xfp579-8081.app.github.dev; style-src 'self' 'unsafe-inline';")
+                    .policyDirectives("default-src 'self'; " +
+                                     "script-src 'self' https://apis.google.com; " +
+                                     "style-src 'self' 'unsafe-inline'; " +
+                                     "form-action 'self' https://turbo-space-palm-tree-jj56jx74vx5xfp579-8081.app.github.dev; " +
+                                     "connect-src 'self' https://turbo-space-palm-tree-jj56jx74vx5xfp579-8081.app.github.dev;")
                 )
-                .frameOptions(frameOptions -> frameOptions.sameOrigin()) // Permitir que o conteúdo seja carregado em iframes da mesma origem
+                .frameOptions().sameOrigin() // Permitir que o conteúdo seja carregado em iframes da mesma origem
             );
 
         return http.build();

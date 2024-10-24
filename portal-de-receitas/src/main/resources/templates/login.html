@@ -4,12 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
+    
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://apis.google.com; style-src 'self' 'unsafe-inline'; form-action 'self' https://turbo-space-palm-tree-jj56jx74vx5xfp579-8081.app.github.dev;">
+    
     <link rel="stylesheet" href="/css/styles.css"> <!-- Link para o arquivo CSS -->
     <script src="/js/script.js" defer></script> <!-- Link para o arquivo JavaScript -->
 </head>
 <body>
     <h1>Login</h1>
-    <form action="/login" method="post">
+    <form action="https://turbo-space-palm-tree-jj56jx74vx5xfp579-8081.app.github.dev/login" method="post">
         <div>
             <label for="username">Usuário:</label>
             <input type="text" id="username" name="username" required>
@@ -23,7 +26,7 @@
         </div>
     </form>
     <div>
-        <p>Não tem uma conta? <a href="/register">Registre-se</a></p> <!-- Link para a página de registro, se houver -->
+        <p>Não tem uma conta? <a href="/register">Registre-se</a></p>
     </div>
 </body>
 </html>
