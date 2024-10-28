@@ -1,68 +1,70 @@
+<!-- Pode alterar e criar mais html so se atente os comentarios pois tem pontos que nao pode ser alterados que estao ligados ao backend sem eles o programa nao funciona!!!! -->
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home - Portal de Receitas</title>
+    <meta charset="UTF-8"> <!-- Define a codificação de caracteres para a página -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Define a responsividade da página -->
+    <title>Home - Portal de Receitas</title> <!-- Título da página que aparece na aba do navegador -->
     <link rel="stylesheet" href="/css/styles.css"> <!-- Link para o arquivo CSS -->
-    <script src="/js/script.js" defer></script> <!-- Link para o arquivo JavaScript -->
+    <script src="/js/script.js" defer></script> <!-- Link para o arquivo JavaScript, com carregamento adiado -->
 </head>
 <body>
     <header>
-        <h1>Bem-vindo ao Portal de Receitas</h1>
+        <h1>Bem-vindo ao Portal de Receitas</h1> <!-- Título principal do cabeçalho -->
         <nav>
             <ul>
-                <li><a href="/api/receitas">Receitas</a></li>
-                <li><a href="/api/comentarios">Comentários</a></li>
-                <li><a href="/api/avaliacoes">Avaliações</a></li>
+                <!-- Lista de navegação -->
+                <li><a href="/api/receitas">Receitas</a></li> <!-- Caminho para as api controller não modifique!!!! /Ensira link para a página de receitas -->
+                <li><a href="/api/comentarios">Comentários</a></li> <!-- Caminho para as api controller não modifique!!!! /Ensira link para a página de comentários -->
+                <li><a href="/api/avaliacoes">Avaliações</a></li> <!--  /Ensira link para a página de avaliações -->
                 <li>
-                    <a href="#" onclick="document.getElementById('loginForm').style.display='block'">Login</a>
+                    <a href="#" onclick="document.getElementById('loginForm').style.display='block'">Login</a> <!-- Abre o formulário de login -->
                 </li>
                 <li>
-                    <a href="#" onclick="document.getElementById('registerForm').style.display='block'">Registrar</a>
+                    <a href="#" onclick="document.getElementById('registerForm').style.display='block'">Registrar</a> <!-- Abre o formulário de registro -->
                 </li>
-                <li><a href="/api/passos">Passos</a></li>
-                <li><a href="/api/categorias">Categorias</a></li>
-                <li><a href="/api/ingredientes">Ingredientes</a></li>
+                <li><a href="/api/passos">Passos</a></li> <!-- Caminho para as api controller não modifique!!!! /Ensira link para a página de passos -->
+                <li><a href="/api/categorias">Categorias</a></li> <!-- Caminho para as api controller não modifique!!!!  /Ensira link para a página de categorias -->
+                <li><a href="/api/ingredientes">Ingredientes</a></li> <!-- Caminho para as api controller não modifique!!!! /Ensira link para a página de ingredientes -->
             </ul>
         </nav>
     </header>
     
     <main>
-        <h2>Explore Receitas Culinárias</h2>
-        <p>Encontre as melhores receitas e compartilhe suas experiências!</p>
+        <h2>Explore Receitas Culinárias</h2> <!-- Subtítulo da seção principal -->
+        <p>Encontre as melhores receitas e compartilhe suas experiências!</p> <!-- Descrição da seção principal -->
 
         <!-- Formulário de Login -->
-        <div id="loginForm" style="display:none;">
+        <div id="loginForm" style="display:none;"> <!-- Formulário inicialmente oculto -->
             <h3>Login</h3>
-            <form action="/api/usuarios/login" method="post">
-                <input type="email" name="email" placeholder="Email" required>
-                <input type="password" name="senha" placeholder="Senha" required>
-                <button type="submit">Entrar</button>
+            <form action="/api/usuarios/login" method="post"> <!-- Ação do formulário que aponta para a API de login não modifique!!!! -->
+                <input type="email" name="email" placeholder="Email" required> <!-- Campo de entrada para email -->
+                <input type="password" name="senha" placeholder="Senha" required> <!-- Campo de entrada para senha -->
+                <button type="submit">Entrar</button> <!-- Botão para enviar o formulário de login -->
             </form>
         </div>
 
         <!-- Formulário de Registro -->
-        <div id="registerForm" style="display:none;">
+        <div id="registerForm" style="display:none;"> <!-- Formulário inicialmente oculto -->
             <h3>Registrar</h3>
-            <form action="/api/usuarios/register" method="post">
-                <input type="text" name="nome" placeholder="Nome" required>
-                <input type="email" name="email" placeholder="Email" required>
-                <input type="password" name="senha" placeholder="Senha" required>
-                <button type="submit">Registrar</button>
+            <form action="/api/usuarios/register" method="post"> <!-- Ação do formulário que aponta para a API de registro não modifique!!!! -->
+                <input type="text" name="nome" placeholder="Nome" required> <!-- Campo de entrada para nome -->
+                <input type="email" name="email" placeholder="Email" required> <!-- Campo de entrada para email -->
+                <input type="password" name="senha" placeholder="Senha" required> <!-- Campo de entrada para senha -->
+                <button type="submit">Registrar</button> <!-- Botão para enviar o formulário de registro -->
             </form>
         </div>
     </main>
     
     <footer>
-        <p>&copy; 2024 Portal de Receitas. Todos os direitos reservados.</p>
+        <p>&copy; 2024 Portal de Receitas. Todos os direitos reservados.</p> <!-- Informações do rodapé -->
     </footer>
 
     <script>
         // Função para mostrar e ocultar os formulários
         function toggleForm(formId) {
-            const form = document.getElementById(formId);
-            form.style.display = (form.style.display === 'block') ? 'none' : 'block';
+            const form = document.getElementById(formId); // Obtém o elemento do formulário pelo ID
+            form.style.display = (form.style.display === 'block') ? 'none' : 'block'; // Alterna a visibilidade do formulário
         }
     </script>
 </body>

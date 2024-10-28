@@ -6,35 +6,36 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.time.LocalDateTime;
+import java.time.LocalDateTime; // Importa a classe LocalDateTime para a data de criação
 
-@Entity
-@Getter
-@Setter
-@NoArgsConstructor
-@ToString
+@Entity // Indica que esta classe é uma entidade JPA
+@Getter // Gera métodos getters automaticamente
+@Setter // Gera métodos setters automaticamente
+@NoArgsConstructor // Gera um construtor sem parâmetros
+@ToString // Gera o método toString automaticamente
 public class Comentario {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Id // Indica que este campo é a chave primária
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // Geração automática do valor da chave primária
+    private Long id; // Identificador do comentário
 
-    private String texto;
+    private String texto; // Texto do comentário
 
-    private LocalDateTime dataCriacao;
+    private LocalDateTime dataCriacao; // Data e hora de criação do comentário
 
-    @ManyToOne
-    @JoinColumn(name = "receita_id")
-    private Receita receita;
+    @ManyToOne // Relacionamento muitos-para-um com a entidade Receita
+    @JoinColumn(name = "receita_id") // Chave estrangeira que referencia a receita
+    private Receita receita; // Receita associada ao comentário
 
-    @ManyToOne
-    @JoinColumn(name = "usuario_id")
-    private Usuario usuario;
+    @ManyToOne // Relacionamento muitos-para-um com a entidade Usuario
+    @JoinColumn(name = "usuario_id") // Chave estrangeira que referencia o usuário
+    private Usuario usuario; // Usuário associado ao comentário
 
+    // Construtor com parâmetros
     public Comentario(String texto, Receita receita, Usuario usuario) {
-        this.texto = texto;
-        this.dataCriacao = LocalDateTime.now();
-        this.receita = receita;
-        this.usuario = usuario;
+        this.texto = texto; // Inicializa o texto do comentário
+        this.dataCriacao = LocalDateTime.now(); // Define a data de criação como o momento atual
+        this.receita = receita; // Inicializa a receita associada
+        this.usuario = usuario; // Inicializa o usuário associado
     }
 }

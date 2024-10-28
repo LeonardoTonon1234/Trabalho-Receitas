@@ -1,36 +1,37 @@
 package br.leonardo.receitas.portal_de.receitas.entidades;
 
-import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import jakarta.persistence.*; // Importa as anotações JPA
+import lombok.Getter; // Importa a anotação Lombok para gerar getters
+import lombok.NoArgsConstructor; // Importa a anotação Lombok para gerar construtor sem parâmetros
+import lombok.Setter; // Importa a anotação Lombok para gerar setters
+import lombok.ToString; // Importa a anotação Lombok para gerar método toString
 
-@Entity
-@Getter
-@Setter
-@NoArgsConstructor
-@ToString
+@Entity // Indica que esta classe é uma entidade JPA
+@Getter // Gera métodos getters automaticamente
+@Setter // Gera métodos setters automaticamente
+@NoArgsConstructor // Gera um construtor sem parâmetros
+@ToString // Gera o método toString automaticamente
 public class Ingrediente {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Id // Indica que este campo é a chave primária
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // Geração automática do valor da chave primária
+    private Long id; // Identificador do ingrediente
 
-    private String nome;
+    private String nome; // Nome do ingrediente
 
-    private Double quantidade;
+    private Double quantidade; // Quantidade do ingrediente
 
-    private String unidadeMedida;
+    private String unidadeMedida; // Unidade de medida do ingrediente
 
-    @ManyToOne
-    @JoinColumn(name = "receita_id")
-    private Receita receita;
+    @ManyToOne // Relacionamento muitos-para-um com a entidade Receita
+    @JoinColumn(name = "receita_id") // Chave estrangeira que referencia a receita
+    private Receita receita; // Receita associada ao ingrediente
 
+    // Construtor com parâmetros
     public Ingrediente(String nome, Double quantidade, String unidadeMedida, Receita receita) {
-        this.nome = nome;
-        this.quantidade = quantidade;
-        this.unidadeMedida = unidadeMedida;
-        this.receita = receita;
+        this.nome = nome; // Inicializa o nome do ingrediente
+        this.quantidade = quantidade; // Inicializa a quantidade do ingrediente
+        this.unidadeMedida = unidadeMedida; // Inicializa a unidade de medida do ingrediente
+        this.receita = receita; // Inicializa a receita associada
     }
 }
