@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home - Portal de Receitas</title>
+    <link rel="stylesheet" href="/css/styles.css"> <!-- Link para o arquivo CSS -->
+    <script src="/js/script.js" defer></script> <!-- Link para o arquivo JavaScript -->
+</head>
+<body>
+    <header>
+        <h1>Bem-vindo ao Portal de Receitas</h1>
+        <nav>
+            <ul>
+                <li><a href="/api/receitas">Receitas</a></li>
+                <li><a href="/api/comentarios">Comentários</a></li>
+                <li><a href="/api/avaliacoes">Avaliações</a></li>
+                <li>
+                    <a href="#" onclick="document.getElementById('loginForm').style.display='block'">Login</a>
+                </li>
+                <li>
+                    <a href="#" onclick="document.getElementById('registerForm').style.display='block'">Registrar</a>
+                </li>
+                <li><a href="/api/passos">Passos</a></li>
+                <li><a href="/api/categorias">Categorias</a></li>
+                <li><a href="/api/ingredientes">Ingredientes</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <main>
+        <h2>Explore Receitas Culinárias</h2>
+        <p>Encontre as melhores receitas e compartilhe suas experiências!</p>
+
+        <!-- Formulário de Login -->
+        <div id="loginForm" style="display:none;">
+            <h3>Login</h3>
+            <form action="/api/usuarios/login" method="post">
+                <input type="email" name="email" placeholder="Email" required>
+                <input type="password" name="senha" placeholder="Senha" required>
+                <button type="submit">Entrar</button>
+            </form>
+        </div>
+
+        <!-- Formulário de Registro -->
+        <div id="registerForm" style="display:none;">
+            <h3>Registrar</h3>
+            <form action="/api/usuarios/register" method="post">
+                <input type="text" name="nome" placeholder="Nome" required>
+                <input type="email" name="email" placeholder="Email" required>
+                <input type="password" name="senha" placeholder="Senha" required>
+                <button type="submit">Registrar</button>
+            </form>
+        </div>
+    </main>
+    
+    <footer>
+        <p>&copy; 2024 Portal de Receitas. Todos os direitos reservados.</p>
+    </footer>
+
+    <script>
+        // Função para mostrar e ocultar os formulários
+        function toggleForm(formId) {
+            const form = document.getElementById(formId);
+            form.style.display = (form.style.display === 'block') ? 'none' : 'block';
+        }
+    </script>
+</body>
+</html>
