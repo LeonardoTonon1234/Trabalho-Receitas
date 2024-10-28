@@ -1,12 +1,14 @@
 package br.leonardo.receitas.portal_de.receitas.controllers;
 
 import br.leonardo.receitas.portal_de.receitas.entidades.Receita;
-import  br.leonardo.receitas.portal_de.receitas.repositories.ReceitaRepository;
+import br.leonardo.receitas.portal_de.receitas.repositories.ReceitaRepository;
+import br.leonardo.receitas.portal_de.receitas.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-// import org.springframework.security.access.prepost.PreAuthorize;
 
 @RestController
 @RequestMapping("/api/receitas")
@@ -20,24 +22,32 @@ public class ReceitaController {
         return receitaRepository.findAll(); // Acesso aberto a todos
     }
 
-    // @PreAuthorize("hasRole('USER')") // Apenas usuários autenticados podem adicionar receitas
     @PostMapping
-    public Receita createReceita(@RequestBody Receita receita) {
-        return receitaRepository.save(receita);
+    public ResponseEntity<Receita> createReceita(@RequestBody Receita receita) {
+        Receita savedReceita = receitaRepository.save(receita);
+        return new ResponseEntity<>(savedReceita, HttpStatus.CREATED);
     }
 
-    // @PreAuthorize("hasRole('USER')") // Apenas usuários autenticados podem editar receitas
     @PutMapping("/{id}")
-    public Receita updateReceita(@PathVariable Long id, @RequestBody Receita receita) {
-        Receita existingReceita = receitaRepository.findById(id).orElseThrow();
+    public ResponseEntity<Receita> updateReceita(@PathVariable Long id, @RequestBody Receita receita) {
+        Receita existingReceita = receitaRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Receita não encontrada"));
         existingReceita.setNome(receita.getNome());
         existingReceita.setDescricao(receita.getDescricao());
-        return receitaRepository.save(existingReceita);
+        return ResponseEntity.ok(receitaRepository.save(existingReceita));
     }
 
-    // @PreAuthorize("hasRole('USER')") // Apenas usuários autenticados podem deletar receitas
     @DeleteMapping("/{id}")
-    public void deleteReceita(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteReceita(@PathVariable Long id) {
+        if (!receitaRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Receita não encontrada");
+        }
         receitaRepository.deleteById(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/por-ingrediente/{ingredienteId}")
+    public List<Receita> getReceitasByIngrediente(@PathVariable Long ingredienteId) {
+        return receitaRepository.findByIngredientes_Id(ingredienteId);
     }
 }
