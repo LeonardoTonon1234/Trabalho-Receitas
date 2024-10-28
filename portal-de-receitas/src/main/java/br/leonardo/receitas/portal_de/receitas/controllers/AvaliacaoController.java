@@ -6,7 +6,6 @@ import br.leonardo.receitas.portal_de.receitas.exceptions.ResourceNotFoundExcept
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,14 +22,12 @@ public class AvaliacaoController {
         return avaliacaoRepository.findAll();
     }
 
-    @PreAuthorize("isAuthenticated()") // Apenas usuários autenticados podem criar avaliações
     @PostMapping
     public ResponseEntity<Avaliacao> createAvaliacao(@RequestBody Avaliacao avaliacao) {
         Avaliacao savedAvaliacao = avaliacaoRepository.save(avaliacao);
         return new ResponseEntity<>(savedAvaliacao, HttpStatus.CREATED);
     }
 
-    @PreAuthorize("isAuthenticated()") // Apenas usuários autenticados podem atualizar avaliações
     @PutMapping("/{id}")
     public ResponseEntity<Avaliacao> updateAvaliacao(@PathVariable Long id, @RequestBody Avaliacao avaliacao) {
         Avaliacao existingAvaliacao = avaliacaoRepository.findById(id)
@@ -42,7 +39,6 @@ public class AvaliacaoController {
         return ResponseEntity.ok(updatedAvaliacao);
     }
 
-    @PreAuthorize("isAuthenticated()") // Apenas usuários autenticados podem deletar avaliações
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteAvaliacao(@PathVariable Long id) {
         if (!avaliacaoRepository.existsById(id)) {

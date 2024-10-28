@@ -4,7 +4,8 @@ import br.leonardo.receitas.portal_de.receitas.entidades.Ingrediente;
 import br.leonardo.receitas.portal_de.receitas.repositories.IngredienteRepository;
 import br.leonardo.receitas.portal_de.receitas.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,28 +19,32 @@ public class IngredienteController {
 
     @GetMapping
     public List<Ingrediente> getAllIngredientes() {
-        return ingredienteRepository.findAll();
+        return ingredienteRepository.findAll(); // Todos podem ver os ingredientes
     }
 
-    @PreAuthorize("isAuthenticated()") // Apenas usuários autenticados podem criar ingredientes
     @PostMapping
-    public Ingrediente createIngrediente(@RequestBody Ingrediente ingrediente) {
-        return ingredienteRepository.save(ingrediente);
+    public ResponseEntity<Ingrediente> createIngrediente(@RequestBody Ingrediente ingrediente) {
+        Ingrediente savedIngrediente = ingredienteRepository.save(ingrediente);
+        return new ResponseEntity<>(savedIngrediente, HttpStatus.CREATED); // Retorna o ingrediente criado
     }
 
-    @PreAuthorize("isAuthenticated()") // Apenas usuários autenticados podem atualizar ingredientes
     @PutMapping("/{id}")
-    public Ingrediente updateIngrediente(@PathVariable Long id, @RequestBody Ingrediente ingrediente) {
-        Ingrediente existingIngrediente = ingredienteRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Ingrediente not found"));
+    public ResponseEntity<Ingrediente> updateIngrediente(@PathVariable Long id, @RequestBody Ingrediente ingrediente) {
+        Ingrediente existingIngrediente = ingredienteRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Ingrediente not found"));
         existingIngrediente.setNome(ingrediente.getNome());
         existingIngrediente.setQuantidade(ingrediente.getQuantidade());
         existingIngrediente.setUnidadeMedida(ingrediente.getUnidadeMedida());
-        return ingredienteRepository.save(existingIngrediente);
+        Ingrediente updatedIngrediente = ingredienteRepository.save(existingIngrediente);
+        return ResponseEntity.ok(updatedIngrediente);
     }
 
-    @PreAuthorize("isAuthenticated()") // Apenas usuários autenticados podem deletar ingredientes
     @DeleteMapping("/{id}")
-    public void deleteIngrediente(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteIngrediente(@PathVariable Long id) {
+        if (!ingredienteRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Ingrediente not found");
+        }
         ingredienteRepository.deleteById(id);
+        return ResponseEntity.noContent().build();
     }
 }
