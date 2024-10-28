@@ -1,70 +1,49 @@
- <?xml version="1.0" encoding="UTF-8"?> 
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" 
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
-   <!-- Pode alterar mais tome cuidado pois qualquer alteracao pode fazer o programa parar de funcionar entao se modificar salve a versao antiga do pom.xml primeiro como backup!!!!!-->
-
-    <!-- Definição do parent POM do Spring Boot -->
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>3.3.4</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-
-    <!-- Identificação do projeto -->
     <groupId>br.leonardo.receitas</groupId>
     <artifactId>portal-de-receitas</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>portal-de-receitas</name>
     <description>Portal de receita culinária</description>
-
     <properties>
-        <java.version>17</java.version> <!-- Versão do Java utilizada -->
+        <java.version>17</java.version>
     </properties>
-
     <dependencies>
-        <!-- Dependência para o Spring Boot Actuator -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
-        
-        <!-- Dependência para Spring Data JPA -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
-        
-        <!-- Dependência para Spring Web -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
-
-        <!-- Dependência para Thymeleaf, usado para renderização de páginas HTML -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-thymeleaf</artifactId> <!-- Adicionando Thymeleaf -->
         </dependency>
-        
-        <!-- Dependência para o banco de dados H2 em memória -->
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
             <scope>runtime</scope>
         </dependency>
-
-        <!-- Dependência para testes no Spring Boot -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
-
-        <!-- Dependência para Lombok, que facilita a geração de código -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
@@ -72,10 +51,8 @@
             <scope>provided</scope>
         </dependency>
     </dependencies>
-
     <build>
         <plugins>
-            <!-- Plugin para empacotar a aplicação como um JAR executável -->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
