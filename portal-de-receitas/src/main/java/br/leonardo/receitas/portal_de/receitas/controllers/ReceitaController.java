@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import org.springframework.security.access.prepost.PreAuthorize;
+// import org.springframework.security.access.prepost.PreAuthorize;
 
 @RestController
 @RequestMapping("/api/receitas")
@@ -20,13 +20,13 @@ public class ReceitaController {
         return receitaRepository.findAll(); // Acesso aberto a todos
     }
 
-    @PreAuthorize("hasRole('USER')") // Apenas usuários autenticados podem adicionar receitas
+    // @PreAuthorize("hasRole('USER')") // Apenas usuários autenticados podem adicionar receitas
     @PostMapping
     public Receita createReceita(@RequestBody Receita receita) {
         return receitaRepository.save(receita);
     }
 
-    @PreAuthorize("hasRole('USER')") // Apenas usuários autenticados podem editar receitas
+    // @PreAuthorize("hasRole('USER')") // Apenas usuários autenticados podem editar receitas
     @PutMapping("/{id}")
     public Receita updateReceita(@PathVariable Long id, @RequestBody Receita receita) {
         Receita existingReceita = receitaRepository.findById(id).orElseThrow();
@@ -35,7 +35,7 @@ public class ReceitaController {
         return receitaRepository.save(existingReceita);
     }
 
-    @PreAuthorize("hasRole('USER')") // Apenas usuários autenticados podem deletar receitas
+    // @PreAuthorize("hasRole('USER')") // Apenas usuários autenticados podem deletar receitas
     @DeleteMapping("/{id}")
     public void deleteReceita(@PathVariable Long id) {
         receitaRepository.deleteById(id);
