@@ -1,68 +1,83 @@
-/* Pode Ser completamente Auterado So Mantenha nessa pasta e se atente aos comentarios!!!! */
+/* Resetando margens e preenchimentos para todos os elementos */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
-/* Estilo do corpo da página */
 body {
-    font-family: Arial, sans-serif; /* Define a fonte como Arial, com uma fonte alternativa */
-    margin: 0;                     /* Remove a margem padrão */
-    padding: 0;                    /* Remove o preenchimento padrão */
+    font-family: Arial, sans-serif;
+    background-color: #660000;
 }
 
-/* Estilo do cabeçalho */
 header {
-    background-color: red; /* Cor de fundo vermelha */
-    color: white;          /* Texto branco */
-    padding: 20px;        /* Espaçamento interno */
-    text-align: center;    /* Centraliza o texto */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #ff8c00; /* Cabeçalho amarelo */
+    padding: 10px 20px;
 }
 
-/* Estilo do formulário */
-form {
-    display: flex;                      /* Utiliza flexbox para layout */
-    flex-direction: column;             /* Alinha os itens em coluna */
-    align-items: center;                /* Centraliza os itens horizontalmente */
-    margin: 20px;                       /* Margem ao redor do formulário */
+header .logo img {
+    width: 80px; /* Tamanho do logo */
 }
 
-/* Estilo dos campos de texto e senha */
-input[type="text"], input[type="password"] {
-    padding: 10px;                     /* Preenchimento interno dos campos */
-    margin: 10px 0;                    /* Margem em cima e embaixo dos campos */
-    width: 80%;                        /* Largura do campo de input */
-    border: 1px solid #ccc;            /* Borda cinza clara */
-    border-radius: 5px;                /* Cantos arredondados */
+nav ul {
+    list-style: none;
+    display: flex;
+    justify-content: center; /* Centraliza os botões horizontalmente */
+    flex-grow: 1; /* Faz com que os botões ocupem o espaço restante */
 }
 
-/* Estilo do botão de submit */
-button {
-    background-color: red; /* Cor de fundo do botão */
-    color: white;          /* Texto do botão em branco */
-    padding: 10px 20px;   /* Preenchimento interno do botão */
-    border: none;          /* Remove a borda padrão */
-    border-radius: 5px;   /* Cantos arredondados do botão */
-    cursor: pointer;       /* Muda o cursor para ponteiro ao passar sobre o botão */
-    transition: background-color 0.3s; /* Transição suave para mudança de cor */
+nav ul li {
+    margin: 0 10px;
 }
 
-/* Estilo do botão ao passar o mouse */
-button:hover {
-    background-color: darkred; /* Cor do botão ao passar o mouse */
+nav ul li a {
+    text-decoration: none;
+    color: white;
+    font-weight: bold;
+    padding: 10px 20px;
+    background-color: #ff6a28;
+    border-radius: 5px;
+    display: inline-block;
 }
 
-/* Estilo do rodapé */
-footer {
-    background-color: black; /* Cor de fundo preta */
-    color: white;            /* Texto branco */
-    text-align: center;      /* Centraliza o texto */
-    padding: 10px;           /* Espaçamento interno */
-    position: fixed;         /* Fixa o rodapé na parte inferior */
-    bottom: 0;               /* Posiciona na parte inferior da página */
-    width: 100%;             /* Largura total do rodapé */
+nav ul li a:hover {
+    background-color: #e55a00;
 }
 
-/* Estilo do corpo principal da página */
 main {
-    background-color: white; /* Cor de fundo branca */
-    color: black;            /* Texto preto */
-    padding: 20px;          /* Preenchimento interno */
-    min-height: calc(100vh - 100px); /* Ajusta a altura mínima para evitar sobreposição com o rodapé */
+    background-image: url('/imagem/wood-floor.png');
+    background-size: cover;
+    background-position: center;
+    height: 80vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    text-align: center;
+}
+
+main h1 {
+    font-size: 36px;
+    margin-bottom: 20px;
+}
+
+main p {
+    font-size: 18px;
+    margin-bottom: 30px;
+}
+
+footer {
+    background-color: #660000;
+    text-align: center;
+    padding: 20px 0;
+    color: white;
+    font-size: 14px;
+}
+
+footer p {
+    margin: 0;
 }

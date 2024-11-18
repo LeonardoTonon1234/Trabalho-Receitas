@@ -13,6 +13,6 @@ public class HomeController {
 
     @GetMapping("/") // Mapeia requisições GET para a raiz da aplicação ("/")
     public String home() {
-        return "index"; // Retorna a view da home page, que deve ser o arquivo index.html
+        return "home"; // Retorna a view da home page, que deve ser o arquivo home.html
     }
 }
