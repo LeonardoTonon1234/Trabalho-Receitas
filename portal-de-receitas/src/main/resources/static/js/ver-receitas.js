@@ -1,88 +1,102 @@
-document.addEventListener("DOMContentLoaded", () => {
-    const recipesContainer = document.getElementById("recipesContainer");
-    const searchForm = document.getElementById("searchForm");
-    const searchName = document.getElementById("searchName");
-    const searchCategory = document.getElementById("searchCategory");
-    const searchIngredient = document.getElementById("searchIngredient");
+document.addEventListener("DOMContentLoaded", function () {
+    // Elementos do DOM
+    const searchNameInput = document.getElementById("search-name");
+    const searchCategorySelect = document.getElementById("search-category");
+    const searchIngredientInput = document.getElementById("search-ingredient");
+    const searchButton = document.getElementById("search-button");
+    const resultsContainer = document.getElementById("results-container");
 
-    /**
-     * Carregar categorias no dropdown de filtro.
-     */
-    async function loadCategories() {
-        try {
-            const response = await fetch("/api/categorias");
-            if (!response.ok) throw new Error("Erro ao buscar categorias");
-            
-            const categories = await response.json();
-            categories.forEach(category => {
-                const option = document.createElement("option");
-                option.value = category.id;
-                option.textContent = category.nome;
-                searchCategory.appendChild(option);
+    // Função para carregar as categorias dinamicamente
+    function loadCategories() {
+        fetch("/api/categorias")
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Erro ao carregar categorias");
+                }
+                return response.json();
+            })
+            .then(categories => {
+                // Adiciona as categorias ao dropdown
+                categories.forEach(category => {
+                    const option = document.createElement("option");
+                    option.value = category.id;
+                    option.textContent = category.nome;
+                    searchCategorySelect.appendChild(option);
+                });
+            })
+            .catch(error => {
+                console.error("Erro ao carregar categorias:", error);
             });
-        } catch (error) {
-            console.error("Erro ao carregar categorias:", error);
-        }
     }
 
-    /**
-     * Carregar receitas com base nos filtros fornecidos.
-     * @param {Object} filters Filtros de busca (nome, categoria, ingrediente).
-     */
-    async function loadRecipes(filters = {}) {
-        try {
-            // Construir query string para filtros
-            const queryParams = new URLSearchParams(filters).toString();
-            const response = await fetch(`/api/receitas?${queryParams}`);
-            if (!response.ok) throw new Error("Erro ao buscar receitas");
+    // Função para buscar receitas com base nos critérios
+    function searchRecipes() {
+        const name = searchNameInput.value.trim();
+        const categoryId = searchCategorySelect.value;
+        const ingredient = searchIngredientInput.value.trim();
 
-            const receitas = await response.json();
-            recipesContainer.innerHTML = ""; // Limpar resultados anteriores
+        // Constrói a URL para a API com os parâmetros de busca
+        let url = "/api/receitas?";
+        if (name) url += `nome=${encodeURIComponent(name)}&`;
+        if (categoryId) url += `categoriaId=${encodeURIComponent(categoryId)}&`;
+        if (ingredient) url += `ingrediente=${encodeURIComponent(ingredient)}`;
 
-            if (receitas.length === 0) {
-                recipesContainer.textContent = "Nenhuma receita encontrada.";
-                return;
-            }
-
-            receitas.forEach(receita => {
-                const recipeCard = document.createElement("div");
-                recipeCard.classList.add("recipe-card");
-                recipeCard.innerHTML = `
-                    <h3>${receita.nome}</h3>
-                    <p>Categoria: ${receita.categoria?.nome || "Sem Categoria"}</p>
-                    <p>${receita.descricao.substring(0, 100)}...</p>
-                    <button onclick="viewRecipe(${receita.id})">Ver Receita</button>
-                `;
-                recipesContainer.appendChild(recipeCard);
+        fetch(url)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Erro ao buscar receitas");
+                }
+                return response.json();
+            })
+            .then(recipes => {
+                displayRecipes(recipes);
+            })
+            .catch(error => {
+                console.error("Erro ao buscar receitas:", error);
+                resultsContainer.innerHTML = "<p>Erro ao buscar receitas. Tente novamente mais tarde.</p>";
             });
-        } catch (error) {
-            console.error("Erro ao carregar receitas:", error);
-            recipesContainer.textContent = "Erro ao carregar receitas. Tente novamente mais tarde.";
-        }
     }
 
-    /**
-     * Redirecionar para a página de detalhes da receita.
-     * @param {Number} id ID da receita a ser visualizada.
-     */
-    window.viewRecipe = (id) => {
-        window.location.href = `/receita/${id}`;
-    };
+    // Função para exibir as receitas no container de resultados
+    function displayRecipes(recipes) {
+        if (recipes.length === 0) {
+            resultsContainer.innerHTML = "<p>Nenhuma receita encontrada.</p>";
+            return;
+        }
 
-    /**
-     * Buscar receitas ao enviar o formulário.
-     */
-    searchForm.addEventListener("submit", (event) => {
-        event.preventDefault(); // Evitar reload da página
-        const filters = {
-            nome: searchName.value.trim(),
-            categoriaId: searchCategory.value,
-            ingrediente: searchIngredient.value.trim()
-        };
-        loadRecipes(filters);
-    });
+        resultsContainer.innerHTML = ""; // Limpa os resultados anteriores
 
-    // Inicializar a página
+        recipes.forEach(recipe => {
+            // Cria um card para cada receita
+            const recipeCard = document.createElement("div");
+            recipeCard.className = "recipe-card";
+
+            const recipeName = document.createElement("h3");
+            recipeName.textContent = recipe.nome;
+
+            const recipeDescription = document.createElement("p");
+            recipeDescription.textContent = recipe.descricao;
+
+            const viewDetailsButton = document.createElement("button");
+            viewDetailsButton.textContent = "Ver Detalhes";
+            viewDetailsButton.onclick = () => viewRecipeDetails(recipe.id);
+
+            recipeCard.appendChild(recipeName);
+            recipeCard.appendChild(recipeDescription);
+            recipeCard.appendChild(viewDetailsButton);
+
+            resultsContainer.appendChild(recipeCard);
+        });
+    }
+
+    // Função para exibir os detalhes de uma receita
+    function viewRecipeDetails(recipeId) {
+        window.location.href = `/receita/${recipeId}`;
+    }
+
+    // Event listener para o botão de busca
+    searchButton.addEventListener("click", searchRecipes);
+
+    // Carrega as categorias ao carregar a página
     loadCategories();
-    loadRecipes();
 });

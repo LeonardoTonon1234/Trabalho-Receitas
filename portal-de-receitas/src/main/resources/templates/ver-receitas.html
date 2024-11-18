@@ -4,52 +4,157 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ver Receitas - Portal de Receitas</title>
-    <link rel="stylesheet" href="/css/styles.css"> <!-- Certifique-se de que styles.css está no caminho correto -->
+    <link rel="stylesheet" href="/css/styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('/imagem/wood-floor.png');
+            background-size: cover;
+            background-position: center;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #ff8c00;
+            padding: 10px 20px;
+        }
+
+        header .logo img {
+            width: 80px;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+        }
+
+        nav ul li {
+            margin: 0 10px;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: white;
+            font-weight: bold;
+            padding: 10px 20px;
+            background-color: #ff6a28;
+            border-radius: 5px;
+            display: inline-block;
+        }
+
+        nav ul li a:hover {
+            background-color: #e55a00;
+        }
+
+        main {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 20px;
+        }
+
+        main h1 {
+            color: #660000;
+            margin-bottom: 20px;
+        }
+
+        .search-container {
+            display: flex;
+            flex-direction: row;
+            gap: 10px;
+            width: 100%;
+            max-width: 800px;
+            margin-bottom: 20px;
+        }
+
+        .search-container input,
+        .search-container select,
+        .search-container button {
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+        }
+
+        .search-container button {
+            background-color: #ff8c00;
+            color: white;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+        }
+
+        .search-container button:hover {
+            background-color: #e55a00;
+        }
+
+        .recipes-container {
+            width: 100%;
+            max-width: 800px;
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            color: #660000; /* Ajuste de cor do texto */
+        }
+
+        .recipes-container h2 {
+            color: #660000; /* Ajuste de cor do título */
+        }
+
+        footer {
+            background-color: #660000;
+            text-align: center;
+            padding: 20px 0;
+            color: white;
+            font-size: 14px;
+            position: absolute;
+            width: 100%;
+            bottom: 0;
+        }
+    </style>
 </head>
 <body>
     <header>
         <div class="logo">
-            <img src="/imagem/logo.png" alt="Logo Portal de Receitas"> <!-- Certifique-se de que logo.png está no caminho correto -->
+            <img src="/imagem/logo.png" alt="Logo Portal de Receitas">
         </div>
         <nav>
             <ul>
-                <li><a href="/">Home</a></li> <!-- Botão para retornar à página inicial -->
-                <li><a href="/login">Login</a></li> <!-- Botão para redirecionar ao Login -->
-                <li><a href="/api/comentarios">Comentários</a></li> <!-- Botão para redirecionar à página de comentários -->
-                <li><a href="/api/avaliacoes">Avaliações</a></li> <!-- Botão para redirecionar à página de avaliações -->
+                <li><a href="/">Home</a></li>
+                <li><a href="/login">Login</a></li>
+                <li><a href="/api/comentarios">Comentários</a></li>
+                <li><a href="/api/avaliacoes">Avaliações</a></li>
             </ul>
         </nav>
     </header>
 
     <main>
         <h1>Ver Receitas</h1>
-        
-        <!-- Filtro de busca -->
-        <section class="filters">
-            <form id="searchForm">
-                <input type="text" id="searchName" placeholder="Buscar por nome" aria-label="Buscar por nome da receita">
-                <select id="searchCategory" aria-label="Buscar por categoria">
-                    <option value="">Todas as Categorias</option>
-                    <!-- As categorias serão carregadas dinamicamente -->
-                </select>
-                <input type="text" id="searchIngredient" placeholder="Buscar por ingrediente" aria-label="Buscar por ingrediente">
-                <button type="submit">Buscar</button>
-            </form>
-        </section>
-        
-        <!-- Lista de receitas -->
-        <section id="recipeList">
+        <div class="search-container">
+            <input type="text" id="search-name" placeholder="Buscar por nome">
+            <select id="search-category">
+                <option value="">Todas as Categorias</option>
+            </select>
+            <input type="text" id="search-ingredient" placeholder="Buscar por ingrediente">
+            <button onclick="searchRecipes()">Buscar</button>
+        </div>
+        <div class="recipes-container" id="recipes-container">
             <h2>Receitas Disponíveis</h2>
-            <div id="recipesContainer">
-                <!-- As receitas serão carregadas dinamicamente -->
-            </div>
-        </section>
+            <p>Nenhuma receita encontrada.</p>
+        </div>
     </main>
 
     <footer>
         <p>&copy; 2024 Portal de Receitas. Todos os direitos reservados.</p>
     </footer>
 
-    <script src="/js/ver-receitas.js" defer></script> <!-- Certifique-se de que o arquivo JS está no caminho correto -->
+    <script src="/js/ver-receitas.js"></script>
 </body>
 </html>
