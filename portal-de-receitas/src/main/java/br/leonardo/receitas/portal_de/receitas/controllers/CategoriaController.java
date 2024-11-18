@@ -1,7 +1,7 @@
 //Feito Por: 
 // Leonardo De Castro Tonon Ra: 10426930
-//MATHEUS CALEIRO PINHEIRO RA: 10418688
-//JOAO PEDRO FERNANDES MILHOMENS RA: 10417578
+// MATHEUS CALEIRO PINHEIRO RA: 10418688
+// JOAO PEDRO FERNANDES MILHOMENS RA: 10417578
 
 package br.leonardo.receitas.portal_de.receitas.controllers;
 
@@ -15,39 +15,46 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController // Indica que esta classe é um controlador REST
-@RequestMapping("/api/categorias") // Mapeia requisições para /api/categorias
+@RestController
+@RequestMapping("/api/categorias")
 public class CategoriaController {
 
-    @Autowired // Injeção de dependência do repositório de categorias
+    @Autowired
     private CategoriaRepository categoriaRepository;
 
-    @GetMapping // Mapeia requisições GET para obter todas as categorias
+    @GetMapping
     public List<Categoria> getAllCategorias() {
-        return categoriaRepository.findAll(); // Retorna todas as categorias do banco de dados
+        return categoriaRepository.findAll();
     }
 
-    @PostMapping // Mapeia requisições POST para criar uma nova categoria
+    @GetMapping("/{id}")
+    public ResponseEntity<Categoria> getCategoriaById(@PathVariable Long id) {
+        Categoria categoria = categoriaRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Categoria não encontrada com ID: " + id));
+        return ResponseEntity.ok(categoria);
+    }
+
+    @PostMapping
     public ResponseEntity<Categoria> createCategoria(@RequestBody Categoria categoria) {
-        Categoria savedCategoria = categoriaRepository.save(categoria); // Salva a nova categoria no banco de dados
-        return new ResponseEntity<>(savedCategoria, HttpStatus.CREATED); // Retorna a categoria salva com status 201
+        Categoria savedCategoria = categoriaRepository.save(categoria);
+        return new ResponseEntity<>(savedCategoria, HttpStatus.CREATED);
     }
 
-    @PutMapping("/{id}") // Mapeia requisições PUT para atualizar uma categoria existente
-    public ResponseEntity<Categoria> updateCategoria(@PathVariable Long id, @RequestBody Categoria categoria) {
-        Categoria existingCategoria = categoriaRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Categoria not found")); // Lança exceção se a categoria não for encontrada
-        existingCategoria.setNome(categoria.getNome()); // Atualiza o nome da categoria
-        Categoria updatedCategoria = categoriaRepository.save(existingCategoria); // Salva a categoria atualizada no banco de dados
-        return ResponseEntity.ok(updatedCategoria); // Retorna a categoria atualizada
+    @PutMapping("/{id}")
+    public ResponseEntity<Categoria> updateCategoria(@PathVariable Long id, @RequestBody Categoria categoriaAtualizada) {
+        Categoria categoria = categoriaRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Categoria não encontrada com ID: " + id));
+        categoria.setNome(categoriaAtualizada.getNome());
+        Categoria updatedCategoria = categoriaRepository.save(categoria);
+        return ResponseEntity.ok(updatedCategoria);
     }
 
-    @DeleteMapping("/{id}") // Mapeia requisições DELETE para excluir uma categoria
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCategoria(@PathVariable Long id) {
         if (!categoriaRepository.existsById(id)) {
-            throw new ResourceNotFoundException("Categoria not found"); // Lança exceção se a categoria não existir
+            throw new ResourceNotFoundException("Categoria não encontrada com ID: " + id);
         }
-        categoriaRepository.deleteById(id); // Exclui a categoria do banco de dados
-        return ResponseEntity.noContent().build(); // Retorna resposta 204 (sem conteúdo)
+        categoriaRepository.deleteById(id);
+        return ResponseEntity.noContent().build();
     }
 }

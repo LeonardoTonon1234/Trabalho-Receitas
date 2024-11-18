@@ -1,55 +1,66 @@
 //Feito Por: 
 // Leonardo De Castro Tonon Ra: 10426930
-//MATHEUS CALEIRO PINHEIRO RA: 10418688
-//JOAO PEDRO FERNANDES MILHOMENS RA: 10417578
+// MATHEUS CALEIRO PINHEIRO RA: 10418688
+// JOAO PEDRO FERNANDES MILHOMENS RA: 10417578
 
 package br.leonardo.receitas.portal_de.receitas.controllers;
 
-import br.leonardo.receitas.portal_de.receitas.entidades.Passo; // Importa a entidade Passo
-import br.leonardo.receitas.portal_de.receitas.repositories.PassoRepository; // Importa o repositório de Passo
-import br.leonardo.receitas.portal_de.receitas.exceptions.ResourceNotFoundException; // Importa a exceção personalizada
-import org.springframework.beans.factory.annotation.Autowired; // Importa a anotação para injeção de dependência
-import org.springframework.http.HttpStatus; // Importa a classe HttpStatus
-import org.springframework.http.ResponseEntity; // Importa a classe ResponseEntity
-import org.springframework.web.bind.annotation.*; // Importa as anotações para o controlador
+import br.leonardo.receitas.portal_de.receitas.entidades.Passo;
+import br.leonardo.receitas.portal_de.receitas.repositories.PassoRepository;
+import br.leonardo.receitas.portal_de.receitas.exceptions.ResourceNotFoundException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.List; // Importa a classe List
+import java.util.List;
 
-@RestController // Indica que esta classe é um controlador REST
-@RequestMapping("/api/passos") // Mapeia requisições para /api/passos
+@RestController
+@RequestMapping("/api/passos")
 public class PassoController {
 
-    @Autowired // Injeção de dependência do repositório de passos
+    @Autowired
     private PassoRepository passoRepository;
 
-    @GetMapping // Mapeia requisições GET para obter todos os passos
+    @GetMapping
     public List<Passo> getAllPassos() {
-        return passoRepository.findAll(); // Retorna todos os passos do banco de dados
+        return passoRepository.findAll();
     }
 
-    @PostMapping // Mapeia requisições POST para criar um novo passo
+    @GetMapping("/{id}")
+    public ResponseEntity<Passo> getPassoById(@PathVariable Long id) {
+        Passo passo = passoRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Passo não encontrado com ID: " + id));
+        return ResponseEntity.ok(passo);
+    }
+
+    @PostMapping
     public ResponseEntity<Passo> createPasso(@RequestBody Passo passo) {
-        Passo savedPasso = passoRepository.save(passo); // Salva o novo passo no banco de dados
-        return new ResponseEntity<>(savedPasso, HttpStatus.CREATED); // Retorna o passo salvo com status 201
+        Passo savedPasso = passoRepository.save(passo);
+        return new ResponseEntity<>(savedPasso, HttpStatus.CREATED);
     }
 
-    @PutMapping("/{id}") // Mapeia requisições PUT para atualizar um passo existente
-    public ResponseEntity<Passo> updatePasso(@PathVariable Long id, @RequestBody Passo passo) {
-        Passo existingPasso = passoRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Passo not found with id: " + id)); // Lança exceção se o passo não for encontrado
-        existingPasso.setDescricao(passo.getDescricao()); // Atualiza a descrição do passo
-        existingPasso.setOrdem(passo.getOrdem()); // Atualiza a ordem do passo
-        existingPasso.setReceita(passo.getReceita()); // Atualiza a receita associada ao passo
-        Passo updatedPasso = passoRepository.save(existingPasso); // Salva o passo atualizado no banco de dados
-        return ResponseEntity.ok(updatedPasso); // Retorna o passo atualizado
+    @PutMapping("/{id}")
+    public ResponseEntity<Passo> updatePasso(@PathVariable Long id, @RequestBody Passo passoAtualizado) {
+        Passo passo = passoRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Passo não encontrado com ID: " + id));
+        passo.setDescricao(passoAtualizado.getDescricao());
+        passo.setOrdem(passoAtualizado.getOrdem());
+        Passo updatedPasso = passoRepository.save(passo);
+        return ResponseEntity.ok(updatedPasso);
     }
 
-    @DeleteMapping("/{id}") // Mapeia requisições DELETE para excluir um passo
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletePasso(@PathVariable Long id) {
         if (!passoRepository.existsById(id)) {
-            throw new ResourceNotFoundException("Passo not found with id: " + id); // Lança exceção se o passo não existir
+            throw new ResourceNotFoundException("Passo não encontrado com ID: " + id);
         }
-        passoRepository.deleteById(id); // Exclui o passo do banco de dados
-        return ResponseEntity.noContent().build(); // Retorna resposta 204 (sem conteúdo)
+        passoRepository.deleteById(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/receita/{receitaId}")
+    public List<Passo> getPassosByReceita(@PathVariable Long receitaId) {
+        return passoRepository.findByReceitaIdOrderByOrdem(receitaId);
     }
 }

@@ -5,55 +5,121 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Portal de Receitas</title>
     <link rel="stylesheet" href="/css/styles.css"> <!-- Certifique-se de que styles.css está no caminho correto -->
+    <style>
+        /* Estilo personalizado para o formulário */
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 80vh;
+        }
+
+        .form-container {
+            background-color: rgba(255, 255, 255, 0.9); /* Fundo com opacidade */
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            width: 350px;
+        }
+
+        .form-container h1 {
+            margin-bottom: 20px;
+            color: #660000;
+            font-size: 24px;
+        }
+
+        .form-container label {
+            font-weight: bold;
+            color: #660000;
+            display: block;
+            margin-bottom: 5px;
+            text-align: left;
+        }
+
+        .form-container input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .form-container button {
+            background-color: #ff8c00;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .form-container button:hover {
+            background-color: #e55a00;
+        }
+
+        .form-container a {
+            color: #660000;
+            font-size: 14px;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+
+        .form-container a:hover {
+            color: #ff8c00;
+        }
+    </style>
 </head>
 <body>
     <header>
         <div class="logo">
-            <img src="/imagem/logo.png" alt="Logo Portal de Receitas"> <!-- Certifique-se de que logo.png está no caminho correto -->
+            <img src="/imagem/logo.png" alt="Logo Portal de Receitas">
         </div>
         <nav>
             <ul>
-                <li><a href="/">Home</a></li> <!-- Ajustado para redirecionar para a rota raiz (home) -->
+                <!-- Ajustando os links de navegação -->
+                <li><a href="/ver-receitas">Ver Receitas</a></li>
+                <li><a href="/api/comentarios">Comentários</a></li>
+                <li><a href="/api/avaliacoes">Avaliações</a></li>
+                <li><a href="/">Home</a></li>
             </ul>
         </nav>
     </header>
 
     <main>
         <div class="container">
-            <div id="login-form">
+            <div class="form-container" id="login-form">
                 <h1>Login</h1>
                 <form id="loginForm" method="POST" action="/api/usuarios/login">
-                    <div class="form-group">
-                        <label for="email">E-mail:</label>
-                        <input type="email" id="email" name="email" required placeholder="Digite seu e-mail">
-                    </div>
-                    <div class="form-group">
-                        <label for="password">Senha:</label>
-                        <input type="password" id="password" name="password" required placeholder="Digite sua senha">
-                    </div>
-                    <button type="submit" class="btn">Entrar</button>
+                    <label for="email">E-mail:</label>
+                    <input type="email" id="email" name="email" required placeholder="Digite seu e-mail">
+                    
+                    <label for="password">Senha:</label>
+                    <input type="password" id="password" name="password" required placeholder="Digite sua senha">
+                    
+                    <button type="submit">Entrar</button>
                 </form>
-                <a class="toggle-link" onclick="toggleForms()">Não tem uma conta? Registre-se</a>
+                <a onclick="toggleForms()">Não tem uma conta? Registre-se</a>
             </div>
 
-            <div id="register-form" style="display: none;">
+            <div class="form-container" id="register-form" style="display: none;">
                 <h1>Registro</h1>
-                <form id="registerForm" method="POST" action="/api/usuarios">
-                    <div class="form-group">
-                        <label for="name">Nome Completo:</label>
-                        <input type="text" id="name" name="name" required placeholder="Digite seu nome completo">
-                    </div>
-                    <div class="form-group">
-                        <label for="email">E-mail:</label>
-                        <input type="email" id="emailRegister" name="email" required placeholder="Digite seu e-mail">
-                    </div>
-                    <div class="form-group">
-                        <label for="password">Senha:</label>
-                        <input type="password" id="passwordRegister" name="password" required placeholder="Crie uma senha">
-                    </div>
-                    <button type="submit" class="btn">Registrar</button>
+                <form id="registerForm" method="POST" action="/api/usuarios/register">
+                    <label for="name">Nome Completo:</label>
+                    <input type="text" id="name" name="name" required placeholder="Digite seu nome completo">
+                    
+                    <label for="email">E-mail:</label>
+                    <input type="email" id="emailRegister" name="email" required placeholder="Digite seu e-mail">
+                    
+                    <label for="password">Senha:</label>
+                    <input type="password" id="passwordRegister" name="password" required placeholder="Crie uma senha">
+                    
+                    <button type="submit">Registrar</button>
                 </form>
-                <a class="toggle-link" onclick="toggleForms()">Já tem uma conta? Faça login</a>
+                <a onclick="toggleForms()">Já tem uma conta? Faça login</a>
             </div>
         </div>
     </main>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ver Receitas - Portal de Receitas</title>
+    <link rel="stylesheet" href="/css/styles.css"> <!-- Certifique-se de que styles.css está no caminho correto -->
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <img src="/imagem/logo.png" alt="Logo Portal de Receitas"> <!-- Certifique-se de que logo.png está no caminho correto -->
+        </div>
+        <nav>
+            <ul>
+                <li><a href="/">Home</a></li> <!-- Botão para retornar à página inicial -->
+                <li><a href="/login">Login</a></li> <!-- Botão para redirecionar ao Login -->
+                <li><a href="/api/comentarios">Comentários</a></li> <!-- Botão para redirecionar à página de comentários -->
+                <li><a href="/api/avaliacoes">Avaliações</a></li> <!-- Botão para redirecionar à página de avaliações -->
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <h1>Ver Receitas</h1>
+        
+        <!-- Filtro de busca -->
+        <section class="filters">
+            <form id="searchForm">
+                <input type="text" id="searchName" placeholder="Buscar por nome" aria-label="Buscar por nome da receita">
+                <select id="searchCategory" aria-label="Buscar por categoria">
+                    <option value="">Todas as Categorias</option>
+                    <!-- As categorias serão carregadas dinamicamente -->
+                </select>
+                <input type="text" id="searchIngredient" placeholder="Buscar por ingrediente" aria-label="Buscar por ingrediente">
+                <button type="submit">Buscar</button>
+            </form>
+        </section>
+        
+        <!-- Lista de receitas -->
+        <section id="recipeList">
+            <h2>Receitas Disponíveis</h2>
+            <div id="recipesContainer">
+                <!-- As receitas serão carregadas dinamicamente -->
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Portal de Receitas. Todos os direitos reservados.</p>
+    </footer>
+
+    <script src="/js/ver-receitas.js" defer></script> <!-- Certifique-se de que o arquivo JS está no caminho correto -->
+</body>
+</html>
