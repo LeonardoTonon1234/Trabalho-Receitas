@@ -14,30 +14,30 @@ import lombok.Setter;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity
-@Getter
-@Setter
-@NoArgsConstructor
+@Entity // Define esta classe como uma entidade JPA
+@Getter // Gera automaticamente os métodos getter para os atributos
+@Setter // Gera automaticamente os métodos setter para os atributos
+@NoArgsConstructor // Gera um construtor sem argumentos
 public class Receita {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Id // Indica que este campo é a chave primária
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // Geração automática do valor da chave primária
+    private Long id; // Identificador único da receita
 
-    @Column(nullable = false)
-    private String nome;
+    @Column(nullable = false) // Define o campo como não nulo
+    private String nome; // Nome da receita
 
-    @Column(nullable = false, length = 500)
-    private String descricao;
+    @Column(nullable = false, length = 500) // Define o campo como não nulo e com limite de 500 caracteres
+    private String descricao; // Descrição da receita
 
-    @OneToMany(mappedBy = "receita", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnore
-    private List<Ingrediente> ingredientes = new ArrayList<>();
+    @OneToMany(mappedBy = "receita", cascade = CascadeType.ALL, orphanRemoval = true) // Relacionamento de um-para-muitos com Ingrediente
+    @JsonIgnore // Ignora este campo na serialização JSON para evitar loops infinitos
+    private List<Ingrediente> ingredientes = new ArrayList<>(); // Lista de ingredientes da receita
 
-    @ManyToOne
-    @JoinColumn(name = "categoria_id")
-    private Categoria categoria;
+    @ManyToOne // Relacionamento de muitos-para-um com Categoria
+    @JoinColumn(name = "categoria_id") // Define a coluna que referencia a chave primária da tabela Categoria
+    private Categoria categoria; // Categoria associada à receita
 
-    @OneToMany(mappedBy = "receita", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Passo> passos = new ArrayList<>();
+    @OneToMany(mappedBy = "receita", cascade = CascadeType.ALL, orphanRemoval = true) // Relacionamento de um-para-muitos com Passo
+    private List<Passo> passos = new ArrayList<>(); // Lista de passos (modo de preparo) da receita
 }

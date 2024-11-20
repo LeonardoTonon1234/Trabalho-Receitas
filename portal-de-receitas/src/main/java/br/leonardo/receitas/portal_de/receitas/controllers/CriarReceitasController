@@ -1,0 +1,27 @@
+// Feito Por:
+// Leonardo De Castro Tonon Ra: 10426930
+// MATHEUS CALEIRO PINHEIRO RA: 10418688
+// JOAO PEDRO FERNANDES MILHOMENS RA: 10417578
+
+package br.leonardo.receitas.portal_de.receitas.controllers;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+
+import javax.servlet.http.HttpSession;
+
+@Controller
+public class CriarReceitasController {
+
+    @GetMapping("/criar-receita")
+    public String showCriarReceita(HttpSession session) {
+        // Verifica se o usuário está logado
+        Boolean isLoggedIn = (Boolean) session.getAttribute("isLoggedIn");
+
+        if (isLoggedIn != null && isLoggedIn) {
+            return "criar-receita"; // Nome do arquivo HTML (criar-receita.html)
+        } else {
+            return "redirect:/login"; // Redireciona para login se não estiver logado
+        }
+    }
+}
