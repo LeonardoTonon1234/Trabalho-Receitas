@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus; // Importa a classe HttpStatus
 import org.springframework.http.ResponseEntity; // Importa a classe ResponseEntity
 import org.springframework.web.bind.annotation.*; // Importa as anotações para o controlador
 
+import javax.servlet.http.HttpSession; // Importa a sessão para controle de login
 import java.util.List; // Importa a classe List
 import java.util.Optional; // Importa a classe Optional
 
@@ -21,6 +22,13 @@ public class UsuarioController {
 
     @Autowired // Injeção de dependência do repositório de usuários
     private UsuarioRepository usuarioRepository;
+
+    // Verifica se o usuário está autenticado
+    @GetMapping("/autenticado")
+    public ResponseEntity<Boolean> isAuthenticated(HttpSession session) {
+        Boolean isLoggedIn = (Boolean) session.getAttribute("isLoggedIn");
+        return ResponseEntity.ok(isLoggedIn != null && isLoggedIn);
+    }
 
     @GetMapping // Mapeia requisições GET para obter todos os usuários
     public List<Usuario> getAllUsuarios() {
@@ -41,16 +49,24 @@ public class UsuarioController {
     }
 
     @PostMapping("/login") // Mapeia requisições POST para fazer login
-    public ResponseEntity<String> login(@RequestBody Usuario usuario) {
+    public ResponseEntity<String> login(@RequestBody Usuario usuario, HttpSession session) {
         // Busca o usuário pelo email fornecido
         Optional<Usuario> existingUsuario = usuarioRepository.findByEmail(usuario.getEmail());
         
         // Verifica se o usuário existe e se a senha está correta
         if (existingUsuario.isPresent() && existingUsuario.get().getSenha().equals(usuario.getSenha())) {
+            session.setAttribute("isLoggedIn", true); // Marca o usuário como logado
             return ResponseEntity.ok("Login bem-sucedido!"); // Retorna mensagem de sucesso
         }
         
+        session.setAttribute("isLoggedIn", false); // Marca o usuário como não logado
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Credenciais inválidas"); // Retorna erro de credenciais inválidas
+    }
+
+    @PostMapping("/logout") // Mapeia requisições POST para logout
+    public ResponseEntity<Void> logout(HttpSession session) {
+        session.invalidate(); // Invalida a sessão
+        return ResponseEntity.noContent().build(); // Retorna resposta 204
     }
 
     @PutMapping("/{id}") // Mapeia requisições PUT para atualizar um usuário existente
