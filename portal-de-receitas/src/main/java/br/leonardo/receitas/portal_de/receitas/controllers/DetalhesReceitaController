@@ -1,0 +1,14 @@
+package br.leonardo.receitas.portal_de.receitas.controllers;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+
+@Controller // Indica que este é um controlador para renderizar páginas HTML
+public class DetalhesReceitaController {
+
+    // Mapeia para a URL onde o HTML de detalhes será acessado
+    @GetMapping("/detalhes-receita/{id}")
+    public String showRecipeDetailsPage() {
+        return "detalhes-receita"; // Renderiza o arquivo detalhes-receita.html (sem a extensão .html)
+    }
+}

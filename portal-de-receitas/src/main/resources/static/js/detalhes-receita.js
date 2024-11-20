@@ -1,28 +1,48 @@
 document.addEventListener("DOMContentLoaded", function () {
-    // Obter o ID da receita a partir da URL
     const recipeId = window.location.pathname.split("/").pop();
     const recipeContainer = document.getElementById("recipe-container");
 
-    // Função para carregar os detalhes da receita
-    function loadRecipeDetails() {
-        fetch(`/api/receitas/${recipeId}/detalhes`)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error("Erro ao carregar detalhes da receita");
-                }
-                return response.json();
-            })
-            .then(recipe => {
-                displayRecipeDetails(recipe);
-            })
-            .catch(error => {
-                console.error("Erro ao carregar os detalhes da receita:", error);
-                recipeContainer.innerHTML = "<p>Erro ao carregar os detalhes da receita. Tente novamente mais tarde.</p>";
-            });
+    let isLoggedIn = false; // Variável para armazenar o status de autenticação
+
+    // Verificar se o usuário está autenticado
+    async function checkAuthentication() {
+        try {
+            const response = await fetch("/api/usuarios/autenticado");
+            const authenticated = await response.json();
+            isLoggedIn = authenticated;
+        } catch (error) {
+            console.error("Erro ao verificar autenticação:", error);
+        }
     }
 
-    // Função para exibir os detalhes da receita
+    // Carregar os detalhes da receita
+    async function loadRecipeDetails() {
+        try {
+            const response = await fetch(`/api/receitas/${recipeId}/detalhes`);
+            if (!response.ok) {
+                throw new Error("Erro ao carregar detalhes da receita");
+            }
+            const recipe = await response.json();
+            displayRecipeDetails(recipe);
+        } catch (error) {
+            console.error("Erro ao carregar os detalhes da receita:", error);
+            recipeContainer.innerHTML = "<p>Erro ao carregar os detalhes da receita. Tente novamente mais tarde.</p>";
+        }
+    }
+
+    // Exibir os detalhes da receita
     function displayRecipeDetails(recipe) {
+        let actions = "";
+
+        if (isLoggedIn) {
+            actions = `
+                <div class="recipe-actions">
+                    <button onclick="editRecipe(${recipe.id})">Editar Receita</button>
+                    <button onclick="deleteRecipe(${recipe.id})">Excluir Receita</button>
+                </div>
+            `;
+        }
+
         recipeContainer.innerHTML = `
             <div class="recipe-header">
                 <h1>${recipe.nome}</h1>
@@ -41,15 +61,42 @@ document.addEventListener("DOMContentLoaded", function () {
                     <h2>Modo de Preparo</h2>
                     <ol>
                         ${recipe.passos
-                            .sort((a, b) => a.ordem - b.ordem) // Ordenar os passos pela ordem
+                            .sort((a, b) => a.ordem - b.ordem)
                             .map(passo => `<li>${passo.descricao}</li>`)
                             .join("")}
                     </ol>
                 </div>
+                ${actions}
             </div>
         `;
     }
 
-    // Carregar os detalhes da receita ao abrir a página
-    loadRecipeDetails();
+    // Função para editar receita
+    function editRecipe(recipeId) {
+        window.location.href = `/editar-receita/${recipeId}`;
+    }
+
+    // Função para excluir receita
+    function deleteRecipe(recipeId) {
+        if (confirm("Tem certeza que deseja excluir esta receita?")) {
+            fetch(`/api/receitas/${recipeId}`, {
+                method: "DELETE",
+            })
+                .then(response => {
+                    if (response.ok) {
+                        alert("Receita excluída com sucesso!");
+                        window.location.href = "/ver-receitas";
+                    } else {
+                        throw new Error("Erro ao excluir a receita.");
+                    }
+                })
+                .catch(error => {
+                    console.error("Erro ao excluir receita:", error);
+                    alert("Erro ao excluir receita. Tente novamente mais tarde.");
+                });
+        }
+    }
+
+    // Inicializar
+    checkAuthentication().then(loadRecipeDetails);
 });

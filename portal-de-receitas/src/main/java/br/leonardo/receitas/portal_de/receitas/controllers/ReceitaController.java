@@ -1,17 +1,16 @@
-//Feito Por: 
-// Leonardo De Castro Tonon Ra: 10426930
-// MATHEUS CALEIRO PINHEIRO RA: 10418688
-// JOAO PEDRO FERNANDES MILHOMENS RA: 10417578
-
 package br.leonardo.receitas.portal_de.receitas.controllers;
 
 import br.leonardo.receitas.portal_de.receitas.entidades.Receita;
+import br.leonardo.receitas.portal_de.receitas.entidades.Usuario;
 import br.leonardo.receitas.portal_de.receitas.exceptions.ResourceNotFoundException;
 import br.leonardo.receitas.portal_de.receitas.repositories.ReceitaRepository;
+import br.leonardo.receitas.portal_de.receitas.repositories.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import jakarta.servlet.http.HttpSession; // Importando a sessão para controle de login
 
 import java.util.List;
 
@@ -22,10 +21,17 @@ public class ReceitaController {
     @Autowired
     private ReceitaRepository receitaRepository;
 
-    // Método para verificar se o usuário está logado (simulação básica)
-    private boolean isUserLoggedIn() {
-        // Substituir essa lógica pelo sistema de autenticação do projeto
-        return true; // Simula que o usuário está logado
+    @Autowired
+    private UsuarioRepository usuarioRepository;
+
+    // Método para verificar se o usuário está logado
+    private Usuario getLoggedUser(HttpSession session) {
+        Long userId = (Long) session.getAttribute("userId");
+        if (userId == null) {
+            throw new IllegalStateException("Usuário não está logado");
+        }
+        return usuarioRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado com ID: " + userId));
     }
 
     // Obter todas as receitas
@@ -44,22 +50,25 @@ public class ReceitaController {
 
     // Criar uma nova receita
     @PostMapping
-    public ResponseEntity<Receita> createReceita(@RequestBody Receita receita) {
-        if (!isUserLoggedIn()) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); // Retorna erro de não autorizado
-        }
+    public ResponseEntity<Receita> createReceita(@RequestBody Receita receita, HttpSession session) {
+        Usuario usuarioLogado = getLoggedUser(session); // Obtém o usuário logado
+        receita.setUsuario(usuarioLogado); // Associa a receita ao usuário logado
         Receita savedReceita = receitaRepository.save(receita);
         return new ResponseEntity<>(savedReceita, HttpStatus.CREATED);
     }
 
     // Atualizar uma receita existente
     @PutMapping("/{id}")
-    public ResponseEntity<Receita> updateReceita(@PathVariable Long id, @RequestBody Receita receitaAtualizada) {
-        if (!isUserLoggedIn()) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); // Retorna erro de não autorizado
-        }
+    public ResponseEntity<Receita> updateReceita(@PathVariable Long id, @RequestBody Receita receitaAtualizada, HttpSession session) {
+        Usuario usuarioLogado = getLoggedUser(session); // Obtém o usuário logado
         Receita receita = receitaRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Receita não encontrada com ID: " + id));
+        
+        // Verifica se o usuário logado é o autor da receita
+        if (!receita.getUsuario().getId().equals(usuarioLogado.getId())) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build(); // Retorna erro de acesso proibido
+        }
+
         receita.setNome(receitaAtualizada.getNome());
         receita.setDescricao(receitaAtualizada.getDescricao());
         receita.setCategoria(receitaAtualizada.getCategoria());
@@ -69,13 +78,16 @@ public class ReceitaController {
 
     // Deletar uma receita
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteReceita(@PathVariable Long id) {
-        if (!isUserLoggedIn()) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); // Retorna erro de não autorizado
+    public ResponseEntity<Void> deleteReceita(@PathVariable Long id, HttpSession session) {
+        Usuario usuarioLogado = getLoggedUser(session); // Obtém o usuário logado
+        Receita receita = receitaRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Receita não encontrada com ID: " + id));
+        
+        // Verifica se o usuário logado é o autor da receita
+        if (!receita.getUsuario().getId().equals(usuarioLogado.getId())) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build(); // Retorna erro de acesso proibido
         }
-        if (!receitaRepository.existsById(id)) {
-            throw new ResourceNotFoundException("Receita não encontrada com ID: " + id);
-        }
+
         receitaRepository.deleteById(id);
         return ResponseEntity.noContent().build();
     }

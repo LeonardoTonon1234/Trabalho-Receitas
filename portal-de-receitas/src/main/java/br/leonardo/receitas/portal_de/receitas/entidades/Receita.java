@@ -1,8 +1,3 @@
-//Feito Por: 
-// Leonardo De Castro Tonon Ra: 10426930
-// MATHEUS CALEIRO PINHEIRO RA: 10418688
-// JOAO PEDRO FERNANDES MILHOMENS RA: 10417578
-
 package br.leonardo.receitas.portal_de.receitas.entidades;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -40,4 +35,9 @@ public class Receita {
 
     @OneToMany(mappedBy = "receita", cascade = CascadeType.ALL, orphanRemoval = true) // Relacionamento de um-para-muitos com Passo
     private List<Passo> passos = new ArrayList<>(); // Lista de passos (modo de preparo) da receita
+
+    // Relacionamento de muitos-para-um com Usuario
+    @ManyToOne // Relacionamento de muitos-para-um com Usuario
+    @JoinColumn(name = "usuario_id", nullable = false) // Define a chave estrangeira para o Usuario
+    private Usuario usuario; // Usuario que criou a receita
 }
