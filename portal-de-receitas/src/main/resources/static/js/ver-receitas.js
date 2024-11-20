@@ -1,22 +1,15 @@
 document.addEventListener("DOMContentLoaded", function () {
-    // Elementos do DOM
     const searchNameInput = document.getElementById("search-name");
     const searchCategorySelect = document.getElementById("search-category");
     const searchIngredientInput = document.getElementById("search-ingredient");
     const searchButton = document.getElementById("search-button");
     const resultsContainer = document.getElementById("results-container");
 
-    // Função para carregar as categorias dinamicamente
+    // Carregar categorias dinamicamente
     function loadCategories() {
         fetch("/api/categorias")
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error("Erro ao carregar categorias");
-                }
-                return response.json();
-            })
+            .then(response => response.json())
             .then(categories => {
-                // Adiciona as categorias ao dropdown
                 categories.forEach(category => {
                     const option = document.createElement("option");
                     option.value = category.id;
@@ -24,40 +17,30 @@ document.addEventListener("DOMContentLoaded", function () {
                     searchCategorySelect.appendChild(option);
                 });
             })
-            .catch(error => {
-                console.error("Erro ao carregar categorias:", error);
-            });
+            .catch(error => console.error("Erro ao carregar categorias:", error));
     }
 
-    // Função para buscar receitas com base nos critérios
+    // Buscar receitas com base nos critérios
     function searchRecipes() {
         const name = searchNameInput.value.trim();
         const categoryId = searchCategorySelect.value;
         const ingredient = searchIngredientInput.value.trim();
 
-        // Constrói a URL para a API com os parâmetros de busca
-        let url = "/api/receitas?";
+        let url = "/api/receitas/buscar?";
         if (name) url += `nome=${encodeURIComponent(name)}&`;
         if (categoryId) url += `categoriaId=${encodeURIComponent(categoryId)}&`;
         if (ingredient) url += `ingrediente=${encodeURIComponent(ingredient)}`;
 
         fetch(url)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error("Erro ao buscar receitas");
-                }
-                return response.json();
-            })
-            .then(recipes => {
-                displayRecipes(recipes);
-            })
+            .then(response => response.json())
+            .then(recipes => displayRecipes(recipes))
             .catch(error => {
                 console.error("Erro ao buscar receitas:", error);
                 resultsContainer.innerHTML = "<p>Erro ao buscar receitas. Tente novamente mais tarde.</p>";
             });
     }
 
-    // Função para exibir as receitas no container de resultados
+    // Exibir receitas no container de resultados
     function displayRecipes(recipes) {
         if (recipes.length === 0) {
             resultsContainer.innerHTML = "<p>Nenhuma receita encontrada.</p>";
@@ -67,7 +50,6 @@ document.addEventListener("DOMContentLoaded", function () {
         resultsContainer.innerHTML = ""; // Limpa os resultados anteriores
 
         recipes.forEach(recipe => {
-            // Cria um card para cada receita
             const recipeCard = document.createElement("div");
             recipeCard.className = "recipe-card";
 
@@ -89,14 +71,11 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    // Função para exibir os detalhes de uma receita
+    // Exibir detalhes de uma receita
     function viewRecipeDetails(recipeId) {
         window.location.href = `/receita/${recipeId}`;
     }
 
-    // Event listener para o botão de busca
     searchButton.addEventListener("click", searchRecipes);
-
-    // Carrega as categorias ao carregar a página
     loadCategories();
 });

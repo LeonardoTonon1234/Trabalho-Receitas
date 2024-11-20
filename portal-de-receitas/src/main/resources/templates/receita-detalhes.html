@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalhes da Receita</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <style>
+        .recipe-container {
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            max-width: 800px;
+            margin: 20px auto;
+            color: #660000;
+        }
+
+        .recipe-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .recipe-header h1 {
+            margin-bottom: 10px;
+        }
+
+        .recipe-header p {
+            font-style: italic;
+            color: #555;
+        }
+
+        .recipe-details {
+            margin-bottom: 20px;
+        }
+
+        .recipe-section {
+            margin-bottom: 20px;
+        }
+
+        .recipe-section h2 {
+            margin-bottom: 10px;
+            border-bottom: 2px solid #ff8c00;
+            display: inline-block;
+        }
+
+        .recipe-actions button {
+            padding: 10px 15px;
+            background-color: #ff8c00;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+
+        .recipe-actions button:hover {
+            background-color: #e55a00;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <img src="/imagem/logo.png" alt="Logo Portal de Receitas">
+        </div>
+        <nav>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/ver-receitas">Ver Receitas</a></li>
+                <li><a href="/login">Login</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <div class="recipe-container" id="recipe-container">
+            <!-- Detalhes da receita serão carregados aqui via JavaScript -->
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Portal de Receitas. Todos os direitos reservados.</p>
+    </footer>
+
+    <script src="/js/detalhes-receita.js"></script>
+</body>
+</html>
