@@ -5,6 +5,15 @@ document.addEventListener("DOMContentLoaded", function () {
     const searchButton = document.getElementById("search-button");
     const resultsContainer = document.getElementById("results-container");
 
+    // Mostrar o botão de criar receita para todos os usuários
+    const createRecipeButton = document.getElementById("create-recipe-container");
+    createRecipeButton.style.display = "block";
+
+    // Redirecionar ao clicar no botão Criar Receita
+    window.redirectToCreateRecipe = function () {
+        window.location.href = "/criar-receita";
+    };
+
     // Carregar categorias dinamicamente
     function loadCategories() {
         fetch("/api/categorias")

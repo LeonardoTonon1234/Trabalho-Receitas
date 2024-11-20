@@ -152,8 +152,8 @@
             <h2>Receitas Disponíveis</h2>
             <p>Nenhuma receita encontrada.</p>
         </div>
-        <!-- Botão para criar receita (apenas visível para usuários logados) -->
-        <div class="create-recipe-container" id="create-recipe-container" style="display: none;">
+        <!-- Botão para criar receita -->
+        <div class="create-recipe-container">
             <button onclick="redirectToCreateRecipe()">Criar Nova Receita</button>
         </div>
     </main>
@@ -163,27 +163,25 @@
     </footer>
 
     <script>
-        // Verifica se o usuário está autenticado e exibe o botão de criar receita
-        function checkAuthentication() {
+        // Redireciona para a página de criação de receitas
+        function redirectToCreateRecipe() {
             fetch('/api/usuarios/autenticado')
                 .then(response => response.json())
                 .then(authenticated => {
                     if (authenticated) {
-                        document.getElementById('create-recipe-container').style.display = 'block';
+                        // Redireciona para criar receita se autenticado
+                        window.location.href = "/criar-receita";
+                    } else {
+                        // Redireciona para login se não estiver autenticado
+                        alert("Você precisa fazer login para criar uma receita!");
+                        window.location.href = "/login";
                     }
                 })
-                .catch(error => console.error("Erro ao verificar autenticação:", error));
+                .catch(error => {
+                    console.error("Erro ao verificar autenticação:", error);
+                    alert("Erro ao verificar autenticação. Tente novamente.");
+                });
         }
-
-        // Redireciona para a página de criação de receitas
-        function redirectToCreateRecipe() {
-            window.location.href = "/criar-receita";
-        }
-
-        document.addEventListener("DOMContentLoaded", function () {
-            checkAuthentication();
-        });
     </script>
-    <script src="/js/ver-receitas.js"></script>
 </body>
 </html>
