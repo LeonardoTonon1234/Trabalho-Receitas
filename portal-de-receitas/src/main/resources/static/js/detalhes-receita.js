@@ -1,6 +1,8 @@
 document.addEventListener("DOMContentLoaded", function () {
     const recipeId = window.location.pathname.split("/").pop();
     const recipeContainer = document.getElementById("recipe-container");
+    const commentRatingContainer = document.getElementById("comment-rating-container");
+    const submitCommentRatingButton = document.getElementById("submit-comment-rating");
 
     let isLoggedIn = false; // Variável para armazenar o status de autenticação
 
@@ -10,6 +12,7 @@ document.addEventListener("DOMContentLoaded", function () {
             const response = await fetch("/api/usuarios/autenticado");
             const authenticated = await response.json();
             isLoggedIn = authenticated;
+            toggleCommentAndRatingForm(); // Exibe o formulário de comentário e avaliação se estiver logado
         } catch (error) {
             console.error("Erro ao verificar autenticação:", error);
         }
@@ -96,6 +99,51 @@ document.addEventListener("DOMContentLoaded", function () {
                 });
         }
     }
+
+    // Função para mostrar ou ocultar o formulário de comentário e avaliação
+    function toggleCommentAndRatingForm() {
+        if (isLoggedIn) {
+            commentRatingContainer.style.display = "block";
+        } else {
+            commentRatingContainer.style.display = "none";
+        }
+    }
+
+    // Enviar comentário e avaliação
+    submitCommentRatingButton.addEventListener("click", function () {
+        const rating = document.getElementById("rating").value;
+        const comment = document.getElementById("comment").value;
+
+        if (!rating) {
+            alert("A avaliação é obrigatória!");
+            return;
+        }
+
+        const data = {
+            rating: rating,
+            comment: comment
+        };
+
+        fetch(`/api/receitas/${recipeId}/avaliar-comentar`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data)
+        })
+            .then(response => {
+                if (response.ok) {
+                    alert("Avaliação e comentário enviados com sucesso!");
+                    window.location.reload(); // Atualiza a página para mostrar a nova avaliação
+                } else {
+                    throw new Error("Erro ao enviar avaliação.");
+                }
+            })
+            .catch(error => {
+                console.error("Erro:", error);
+                alert("Erro ao enviar avaliação e comentário.");
+            });
+    });
 
     // Inicializar
     checkAuthentication().then(loadRecipeDetails);

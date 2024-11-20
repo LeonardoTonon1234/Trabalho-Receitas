@@ -5,68 +5,94 @@
 
 package br.leonardo.receitas.portal_de.receitas.controllers;
 
-// Importa as classes necessárias para o funcionamento do controlador
 import br.leonardo.receitas.portal_de.receitas.entidades.Avaliacao;
-import br.leonardo.receitas.portal_de.receitas.repositories.AvaliacaoRepository;
+import br.leonardo.receitas.portal_de.receitas.entidades.Usuario;
+import br.leonardo.receitas.portal_de.receitas.entidades.Receita;
 import br.leonardo.receitas.portal_de.receitas.exceptions.ResourceNotFoundException;
+import br.leonardo.receitas.portal_de.receitas.repositories.AvaliacaoRepository;
+import br.leonardo.receitas.portal_de.receitas.repositories.ReceitaRepository;
+import br.leonardo.receitas.portal_de.receitas.repositories.UsuarioRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import jakarta.servlet.http.HttpSession;
+
 import java.util.List;
 
-// Anota a classe como um controlador REST
 @RestController
-// Define a base URL para as requisições de avaliação
 @RequestMapping("/api/avaliacoes")
 public class AvaliacaoController {
 
-    // Injeta o repositório de avaliação
     @Autowired
     private AvaliacaoRepository avaliacaoRepository;
 
-    // Método para obter todas as avaliações
+    @Autowired
+    private UsuarioRepository usuarioRepository;
+
+    @Autowired
+    private ReceitaRepository receitaRepository;
+
+    // Verificar usuário logado
+    private Usuario getLoggedUser(HttpSession session) {
+        Long userId = (Long) session.getAttribute("userId");
+        if (userId == null) {
+            throw new IllegalStateException("Usuário não está logado");
+        }
+        return usuarioRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado com ID: " + userId));
+    }
+
+    // Obter todas as avaliações
     @GetMapping
     public List<Avaliacao> getAllAvaliacoes() {
-        // Retorna a lista de todas as avaliações do repositório
         return avaliacaoRepository.findAll();
     }
 
-    // Método para criar uma nova avaliação
-    @PostMapping
-    public ResponseEntity<Avaliacao> createAvaliacao(@RequestBody Avaliacao avaliacao) {
-        // Salva a nova avaliação no repositório
+    // Criar nova avaliação
+    @PostMapping("/{receitaId}")
+    public ResponseEntity<Avaliacao> createAvaliacao(@PathVariable Long receitaId, @RequestBody Avaliacao avaliacao, HttpSession session) {
+        Usuario usuarioLogado = getLoggedUser(session);
+        Receita receita = receitaRepository.findById(receitaId)
+                .orElseThrow(() -> new ResourceNotFoundException("Receita não encontrada com ID: " + receitaId));
+
+        avaliacao.setReceita(receita);
+        avaliacao.setUsuario(usuarioLogado);
+
         Avaliacao savedAvaliacao = avaliacaoRepository.save(avaliacao);
-        // Retorna a avaliação criada com o status de sucesso
         return new ResponseEntity<>(savedAvaliacao, HttpStatus.CREATED);
     }
 
-    // Método para atualizar uma avaliação existente
+    // Atualizar avaliação
     @PutMapping("/{id}")
-    public ResponseEntity<Avaliacao> updateAvaliacao(@PathVariable Long id, @RequestBody Avaliacao avaliacao) {
-        // Busca a avaliação pelo ID, lançando uma exceção se não for encontrada
+    public ResponseEntity<Avaliacao> updateAvaliacao(@PathVariable Long id, @RequestBody Avaliacao avaliacao, HttpSession session) {
+        Usuario usuarioLogado = getLoggedUser(session);
         Avaliacao existingAvaliacao = avaliacaoRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Avaliacao not found with id: " + id));
-        // Atualiza os atributos da avaliação
+                .orElseThrow(() -> new ResourceNotFoundException("Avaliacao não encontrada com ID: " + id));
+
+        if (!existingAvaliacao.getUsuario().getId().equals(usuarioLogado.getId())) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+
         existingAvaliacao.setEstrelas(avaliacao.getEstrelas());
-        existingAvaliacao.setReceita(avaliacao.getReceita());
-        existingAvaliacao.setUsuario(avaliacao.getUsuario());
-        // Salva a avaliação atualizada e retorna com o status de sucesso
         Avaliacao updatedAvaliacao = avaliacaoRepository.save(existingAvaliacao);
         return ResponseEntity.ok(updatedAvaliacao);
     }
 
-    // Método para deletar uma avaliação pelo ID
+    // Deletar avaliação
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteAvaliacao(@PathVariable Long id) {
-        // Verifica se a avaliação existe, lançando uma exceção se não
-        if (!avaliacaoRepository.existsById(id)) {
-            throw new ResourceNotFoundException("Avaliacao not found with id: " + id);
+    public ResponseEntity<Void> deleteAvaliacao(@PathVariable Long id, HttpSession session) {
+        Usuario usuarioLogado = getLoggedUser(session);
+        Avaliacao avaliacao = avaliacaoRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Avaliacao não encontrada com ID: " + id));
+
+        if (!avaliacao.getUsuario().getId().equals(usuarioLogado.getId())) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
-        // Deleta a avaliação pelo ID
+
         avaliacaoRepository.deleteById(id);
-        // Retorna um status de sucesso sem corpo
         return ResponseEntity.noContent().build();
     }
 }

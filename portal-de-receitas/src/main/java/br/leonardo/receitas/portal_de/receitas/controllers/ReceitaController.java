@@ -1,10 +1,20 @@
+//Feito Por: 
+// Leonardo De Castro Tonon Ra: 10426930
+//MATHEUS CALEIRO PINHEIRO RA: 10418688
+//JOAO PEDRO FERNANDES MILHOMENS RA: 10417578
+
 package br.leonardo.receitas.portal_de.receitas.controllers;
 
 import br.leonardo.receitas.portal_de.receitas.entidades.Receita;
 import br.leonardo.receitas.portal_de.receitas.entidades.Usuario;
+import br.leonardo.receitas.portal_de.receitas.entidades.Comentario;
+import br.leonardo.receitas.portal_de.receitas.entidades.Avaliacao;
 import br.leonardo.receitas.portal_de.receitas.exceptions.ResourceNotFoundException;
 import br.leonardo.receitas.portal_de.receitas.repositories.ReceitaRepository;
 import br.leonardo.receitas.portal_de.receitas.repositories.UsuarioRepository;
+import br.leonardo.receitas.portal_de.receitas.repositories.ComentarioRepository;
+import br.leonardo.receitas.portal_de.receitas.repositories.AvaliacaoRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +33,12 @@ public class ReceitaController {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
+
+    @Autowired
+    private ComentarioRepository comentarioRepository;
+
+    @Autowired
+    private AvaliacaoRepository avaliacaoRepository;
 
     // Método para verificar se o usuário está logado
     private Usuario getLoggedUser(HttpSession session) {
@@ -110,5 +126,25 @@ public class ReceitaController {
         Receita receita = receitaRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Receita não encontrada com o ID: " + id));
         return ResponseEntity.ok(receita);
+    }
+
+    // Obter avaliações de uma receita
+    @GetMapping("/{id}/avaliacoes")
+    public List<Avaliacao> getAvaliacoesByReceita(@PathVariable Long id) {
+        Receita receita = receitaRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Receita não encontrada com ID: " + id));
+        return avaliacaoRepository.findAll().stream()
+                .filter(avaliacao -> avaliacao.getReceita().equals(receita))
+                .toList();
+    }
+
+    // Obter comentários de uma receita
+    @GetMapping("/{id}/comentarios")
+    public List<Comentario> getComentariosByReceita(@PathVariable Long id) {
+        Receita receita = receitaRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Receita não encontrada com ID: " + id));
+        return comentarioRepository.findAll().stream()
+                .filter(comentario -> comentario.getReceita().equals(receita))
+                .toList();
     }
 }
